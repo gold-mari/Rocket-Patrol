@@ -18,6 +18,10 @@ class Menu extends Phaser.Scene {
             startFrame: 0,
             endFrame: 9
         });
+        // load SFX
+        this.load.audio("sfx-select", "./assets/sfx-select.wav");
+        this.load.audio("sfx-explosion", "./assets/sfx-explosion.wav");
+        this.load.audio("sfx-shot", "./assets/sfx-shot.wav");
     }
 
     create()
@@ -29,7 +33,59 @@ class Menu extends Phaser.Scene {
             frameRate: 30
         });
 
-        this.add.text(20, 20, "Rocket Patrol Menu");
-        this.scene.start("playScene");
+        let menuConfig = 
+        {
+            fontFamily: "Courier",
+            fortSize: "28px",
+            backgroundColor: "#f3b141",
+            color: "#843605",
+            align: "right",
+            padding: 
+            {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+
+        // display menu        
+        this.add.text(game.config.width/2, game.config.height/2-borderUISize-borderPadding,
+                      "ROCKET PATROL", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 
+                      "USE <- -> arrows to move & (F) to fire", menuConfig).setOrigin(0.5);
+        menuConfig.backgroundColor = "#00ff00";
+        menuConfig.color = "#000";
+        this.add.text(game.config.width/2, game.config.height/2+borderUISize+borderPadding, 
+                      "Press <- for Novice or -> for Expert", menuConfig).setOrigin(0.5);
+
+        // define keys
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    }
+
+    update()
+    {
+        if (Phaser.Input.Keyboard.JustDown(keyLEFT))
+        {
+            // easy mode
+            game.settings = 
+            {
+                spaceshipSpeed: 3,
+                gameTimer: 60000
+            }
+            this.sound.play("sfx-select");
+            this.scene.start("playScene");
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyRIGHT))
+        {
+            // easy mode
+            game.settings = 
+            {
+                spaceshipSpeed: 4,
+                gameTimer: 45000
+            }
+            this.sound.play("sfx-select");
+            this.scene.start("playScene");
+        }
     }
 }
